@@ -2,11 +2,14 @@
   "name": "ts-students-initial",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "transpile": "npx tsc --watch"
   },
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
 }

@@ -1,27 +1,66 @@
 import data from "./data.js";
 
 const students = JSON.parse(data);
-console.log(students);
+// console.log(students);
 
-function addRow(table) {
-  let tr = table.querySelector("tbody").insertRow();
-  const name = tr.insertCell();
-  name.appendChild(document.createTextNode("Elena Garcia"));
+interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateAdmission: string;
+  birthYear: string;
+  focusArea?: string | string[];
+  dateRegistrationSuspended?: string;
+}
 
-  const age = tr.insertCell();
-  age.appendChild(document.createTextNode("33"));
+function addRow(table: HTMLTableElement, student: Student) {
+  const tableBody = table.querySelector("tbody") as HTMLTableSectionElement;
 
-  const majors = tr.insertCell();
-  majors.appendChild(
-    document.createTextNode("Space Engineering, Civil Engineering")
+  const tableRow = tableBody.insertRow();
+
+  const name = tableRow.insertCell();
+
+  name.appendChild(
+    document.createTextNode(`${student.firstName}  ${student.lastName}`)
   );
 
-  const status = tr.insertCell();
-  status.appendChild(document.createTextNode("Active"));
+  const age = tableRow.insertCell();
+
+  age.appendChild(
+    document.createTextNode(
+      (new Date().getFullYear() - parseInt(student.birthYear)).toString()
+    )
+  );
+
+  const majors = tableRow.insertCell();
+
+  if (student.focusArea) {
+    if (typeof student.focusArea === "string") {
+      majors.appendChild(document.createTextNode(student.focusArea));
+    } else {
+      const majorsList = student.focusArea.join(", ");
+      majors.appendChild(document.createTextNode(majorsList));
+    }
+  } else {
+    majors.appendChild(document.createTextNode("---"));
+  }
+
+  const status = tableRow.insertCell();
+
+  if (student.dateRegistrationSuspended) {
+    status.appendChild(document.createTextNode("Inactive"));
+  } else {
+    status.appendChild(document.createTextNode("Active"));
+  }
 }
 
 function selectTable() {
-  return document.querySelector("#students-table");
+  return <HTMLTableElement>document.querySelector("#students-table");
 }
 
-addRow(selectTable());
+function populateTable(students: Student) {}
+for (const student in students) {
+  addRow(selectTable(), students[student]);
+}
+
+populateTable(students);
